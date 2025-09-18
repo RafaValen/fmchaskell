@@ -1,0 +1,20 @@
+# Arquivos do macOS
+.DS_Store
+
+# Arquivos de backup do editor
+*~
+*.swp
+*.swo
+
+# Binários e arquivos compilados Haskell
+/dist-newstyle/
+*.hi
+*.o
+*.dyn_o
+*.dyn_hi
+
+# Build intermediário do Stack ou Cabal
+.stack-work/
+cabal.project.local
+
+
