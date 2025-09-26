@@ -34,48 +34,71 @@ infixl 6 +
 
 -- Output: O means False, S O means True
 isZero :: Nat -> Nat
-isZero = undefined
+isZero O     = S O   -- True
+isZero (S _) = O     -- False
+
 
 -- pred is the predecessor but we define zero's to be zero
 pred :: Nat -> Nat
-pred = undefined
+pred O    =  O
+pred (S n) = n
 
 -- Output: O means False, S O means True
 even :: Nat -> Nat
-even = undefined
+even O         = S    O
+even (S O)     =      O
+even (S (S n)) = even n
 
 odd :: Nat -> Nat
-odd = undefined
+odd O = O
+odd (S O) = S O
+odd (S (S n)) = odd n
 
 -- This is called the dotminus or monus operator
 -- (also: proper subtraction, arithmetic subtraction, ...).
 -- It behaves like subtraction, except that it returns 0
 -- when "normal" subtraction would return a negative number.
 monus :: Nat -> Nat -> Nat
-monus = undefined
+monus n O = n
+monus O _ = O
+monus (S n) (S m) = monus n m
 
 (-*) :: Nat -> Nat -> Nat
 (-*) = monus
 
 -- multiplication
 (*) :: Nat -> Nat -> Nat
-(*) = undefined
+(*) n O = O
+(*) n (S m) = n + (n * m)
 
 infixl 7 *
 
 -- exponentiation
 (^) :: Nat -> Nat -> Nat
-(^) = undefined
+(^) n O = S O
+(^) n (S m) = n * (n ^ m)
 
 -- decide: infix? ? ^
 
 -- quotient
 (/) :: Nat -> Nat -> Nat
-(/) = undefined
+O / O  = undefined
+S n / O = undefined
+O / S m = O
+S m / S n = case n -* m of
+                    O -> S O
+                    n -> S n / S m
+
+
+
 
 -- remainder
 (%) :: Nat -> Nat -> Nat
-(%) = undefined
+O % O = undefined
+S n % O = undefined
+O % S m = O
+S m % S n = case m -* n of
+                    O -> S
 
 -- divides
 -- just for a change, we start by defining the "symbolic" operator
