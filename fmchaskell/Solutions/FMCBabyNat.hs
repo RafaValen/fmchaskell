@@ -105,7 +105,7 @@ x % y = x -* (y * (x/y))
 (|||) :: Nat -> Nat -> Nat
 (|||) O _ = undefined -- 0 does not divide anything
 (|||) _ O = S O -- every number divides 0
-(|||) x y = (x % y) `isZero` -- if remainder is 0, then x divides y
+(|||) x y = (y % x) `isZero` -- if remainder is 0, then x divides y
 
 -- x `absDiff` y = |x - y|
 -- (Careful here: this - is the actual minus operator we know from the integers!)
