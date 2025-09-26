@@ -103,24 +103,38 @@ x % y = x -* (y * (x/y))
 -- and then define `devides` as a synonym to it
 -- again, outputs: O means False, S O means True
 (|||) :: Nat -> Nat -> Nat
-(|||) = undefined
+(|||) O _ = undefined -- 0 does not divide anything
+(|||) _ O = S O -- every number divides 0
+(|||) x y = (x % y) `isZero` -- if remainder is 0, then x divides y
 
 -- x `absDiff` y = |x - y|
 -- (Careful here: this - is the actual minus operator we know from the integers!)
 absDiff :: Nat -> Nat -> Nat
-absDiff = undefined
+absDiff O m = m
+absDiff n O = n
+absDiff (S n) (S m) = absDiff n m
+infixl 6 |-| -- same precendence as + and -*
 
 (|-|) :: Nat -> Nat -> Nat
 (|-|) = absDiff
 
 factorial :: Nat -> Nat
-factorial = undefined
+factorial O = S O
+factorial (S n) = (S n) * factorial n
 
 -- signum of a number (-1, 0, or 1)
 sg :: Nat -> Nat
-sg = undefined
+sg O = O
+sg (S _) = S O
 
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
-lo = undefined
+lo O _ = undefined
+lo (S O) _ = undefined
+lo _ O = undefined
+lo b (S O) = O
+lo b a = case isZero (a *- b) of
+           S O -> O
+            O -> S (lo b (a / b))
+
 
