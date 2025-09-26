@@ -79,6 +79,7 @@ infixl 7 *
 (^) n (S m) = n * (n ^ m)
 
 -- decide: infix? ? ^
+infixr 8 ^
 
 -- quotient
 (/) :: Nat -> Nat -> Nat
@@ -94,11 +95,8 @@ S m / S n = case n -* m of
 
 -- remainder
 (%) :: Nat -> Nat -> Nat
-O % O = undefined
-S n % O = undefined
-O % S m = O
-S m % S n = case m -* n of
-                    O -> S
+_ % O = undefined
+x % y = x -* (y * (x/y))
 
 -- divides
 -- just for a change, we start by defining the "symbolic" operator
