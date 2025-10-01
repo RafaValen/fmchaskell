@@ -45,46 +45,57 @@ instance Enum Bool where
     fromEnum True = 1
 
 -- conjunction (AND)
-(&&) :: Bool -> Bool -> Bool
-
-
 infixr 3 &&
+
+(&&) :: Bool -> Bool -> Bool
+True && True = True
+_    && _    = False
 
 -- disjunction (OR)
 (||) :: Bool -> Bool -> Bool
-(||) = undefined
+True || _   = True
+_    || True = True
+False || False = False
+
 
 infixr 2 ||
 
 -- NAND (Sheffer stroke)
 (/|\) :: Bool -> Bool -> Bool
-(/|\) = undefined
+True /|\ True = False
+_    /|\ _    = True
 
 infixr 2 /|\
 
 -- NOR (aka: Peirce arrow or Quine dagger)
 (\|/) :: Bool -> Bool -> Bool
-(\|/) = undefined
+False \|/ False = True
+_     \|/ _    = False
 
 infixr 2 \|/
 
 -- XOR (exclusive disjunction)
 (<=/=>) :: Bool -> Bool -> Bool
-(<=/=>) = undefined
+True <=/=> False = True
+False <=/=> True = True 
+_   <=/=> _     = False
 
 infixr 2 <=/=>
 
 -- boolean negation
 not :: Bool -> Bool
-not = undefined
+not True = False
+not False = True
 
 -- if-then-else expression
 ifThenElse :: Bool -> a -> a -> a
-ifThenElse = undefined
+ifThenElse True x _ = x
+ifThenElse False _ y = y
 
 -- logical "implies"
 (==>) :: Bool -> Bool -> Bool
-(==>) = undefined
+False ==> _ = True
+True ==> b = b
 
 infixr 1 ==>
 
