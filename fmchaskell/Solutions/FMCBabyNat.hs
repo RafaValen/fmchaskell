@@ -1,3 +1,4 @@
+
 module FMCBabyNat where
 
 -- Do not alter this import!
@@ -27,16 +28,14 @@ eight = S seven
 (+) :: Nat -> Nat -> Nat
 n + O   = n
 n + S m = S (n + m)
-
- -- syntactic associativity: L
- -- syntactic precedence: 6
+-- syntactic associativity: L
+-- syntactic precedence: 6
 infixl 6 +
 
 -- Output: O means False, S O means True
 isZero :: Nat -> Nat
 isZero O     = S O   -- True
 isZero (S _) = O     -- False
-
 
 -- pred is the predecessor but we define zero's to be zero
 pred :: Nat -> Nat
@@ -45,8 +44,8 @@ pred (S n) = n
 
 -- Output: O means False, S O means True
 even :: Nat -> Nat
-even O         = S    O
-even (S O)     =      O
+even O         = S O
+even (S O)     = O
 even (S (S n)) = even n
 
 odd :: Nat -> Nat
@@ -83,38 +82,38 @@ infixr 8 ^
 
 -- quotient
 (/) :: Nat -> Nat -> Nat
-O / O  = undefined
-S n / O = undefined
-O / S m = O
-S m / S n = case n -* m of
+(S n) / O = undefined
+O / (S m) = O
+(S m) / (S n) = case n -* m of
                     O -> S O
-                    n -> S n / S m
-
-
-
+                    k -> (S m) / (S k)
 
 -- remainder
 (%) :: Nat -> Nat -> Nat
 _ % O = undefined
-x % y = x -* (y * (x/y))
+x % y = x -* (y * (x / y))
+infixl 7 %
 
 -- divides
 -- just for a change, we start by defining the "symbolic" operator
 -- and then define `devides` as a synonym to it
 -- again, outputs: O means False, S O means True
 (|||) :: Nat -> Nat -> Nat
-(|||) O _ = undefined -- 0 does not divide anything
+(|||) O _ = O -- 0 does not divide anything
 (|||) _ O = S O -- every number divides 0
-(|||) x y = (y % x) `isZero` -- if remainder is 0, then x divides y
+(|||) x y = case isZero (y % x) of
+              S O -> S O
+              O   -> O
 
 -- x `absDiff` y = |x - y|
 -- (Careful here: this - is the actual minus operator we know from the integers!)
-absDiff :: Nat -> Nat -> Nat
-absDiff O m = m
-absDiff n O = n
-absDiff (S n) (S m) = absDiff n m
-infixl 6 |-| -- same precendence as + and -*
 
+absDiff :: Nat -> Nat -> Nat
+absDiff O m          = m
+absDiff n O          = n
+absDiff (S n) (S m)  = absDiff n m
+
+infixl 6 |-|
 (|-|) :: Nat -> Nat -> Nat
 (|-|) = absDiff
 
@@ -132,9 +131,6 @@ lo :: Nat -> Nat -> Nat
 lo O _ = undefined
 lo (S O) _ = undefined
 lo _ O = undefined
-lo b (S O) = O
-lo b a = case isZero (a *- b) of
-           S O -> O
-            O -> S (lo b (a / b))
-
-
+lo b a = case (a / b) of
+           O -> O
+           q -> S (lo b q)
