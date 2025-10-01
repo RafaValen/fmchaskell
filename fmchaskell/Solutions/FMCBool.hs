@@ -36,13 +36,13 @@ instance Show Bool where
 
 instance Enum Bool where
 
-    toEnum :: Int -> Bool
-    toEnum 0 = False
-    toEnum _ = True
+toEnum :: Int -> Bool
+toEnum 0 = False
+toEnum _ = True
 
-    fromEnum :: Bool -> Int
-    fromEnum False = 0
-    fromEnum True = 1
+fromEnum :: Bool -> Int
+fromEnum False = 0
+fromEnum True = 1
 
 -- conjunction (AND)
 infixr 3 &&
@@ -101,14 +101,14 @@ infixr 1 ==>
 
 -- logical "implied by"
 (<==) :: Bool -> Bool -> Bool
-(<==) = undefined
+b <== False = True
+b <== True = b
 
 infixl 1 <==
 
 -- logical equivalence
 (<=>) :: Bool -> Bool -> Bool
-(<=>) = undefined
-
+a <=> b = (a ==> b) && (b ==> a)
 infixr 1 <=>
 
 
