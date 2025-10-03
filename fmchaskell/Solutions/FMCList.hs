@@ -125,13 +125,37 @@ maximum (x:xs) = max x (maximum xs)
 
 
 -- take
+take :: Int -> [a] -> [a]
+take n _ | n <= 0 = []
+take _ [] = []
+take n (x:xs) = x : take (n-1) xs
 -- drop
+drop :: Int -> [a] -> [a]
+drop n xs | n <= 0 = xs
+drop _ [] = []
+drop n (_:xs) = drop (n-1) xs
 
 -- takeWhile
+takeWhile :: (a -> Bool) -> [a] -> [a]
+takeWhile _ [] = []
+takeWhile p (x:xs)
+  | p x    = x : takeWhile p xs
+  | otherwise = []
 -- dropWhile
+dropWhile :: (a -> Bool) -> [a] -> [a]
+dropWhile _ [] = []
+dropWhile p xs@(x:xs')
+  | p x    = dropWhile p xs'
 
 -- tails
+tails :: [a] -> [[a]]
+tails [] = [[]]
+tails xs@(_:xs') = xs : tails xs'
 -- init
+init :: [a] -> [a]
+init [] = error "init: empty list"
+init [_] = []
+init (x:xs) = x : init xs
 -- inits
 
 -- subsequences
