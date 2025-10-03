@@ -157,46 +157,132 @@ init [] = error "init: empty list"
 init [_] = []
 init (x:xs) = x : init xs
 -- inits
+inits :: [a] -> [[a]]
+inits [] = [[]]
+inits xs = inits (init xs) ++ [xs]
 
 -- subsequences
-
+subsequences :: [a] -> [[a]]
+subsequences [] = [[]]
+subsequences (x:xs) = let subs = subsequences xs in subs ++ L.map (x:) subs
 -- any
+any :: (a -> Bool) -> [a] -> Bool
+any _ [] = False
+any p (x:xs) = p x || any p xs
 -- all
+all :: (a -> Bool) -> [a] -> Bool
+all _ [] = True
+all p (x:xs) = p x && all p xs
 
 -- and
+and :: [Bool] -> Bool
+and [] = True
+and (b:bs) = b && and bs
+
 -- or
+or :: [Bool] -> Bool
+or [] = False
+or (b:bs) = b || or bs
 
 -- concat
+concat :: [[a]] -> [a]
+concat [] = []
+concat (xs:xss) = xs ++ concat xss
 
 -- elem using the funciton 'any' above
+elem :: Eq a => a -> [a] -> Bool
+elem y  = any (== y) 
+
 
 -- elem': same as elem but elementary definition
 -- (without using other functions except (==))
+elem' :: Eq a => a -> [a] -> Bool
+elem' _ [] = False
+elem' y (x:xs) = (y == x) || elem' y xs
 
 -- (!!)
+(!!) :: [a] -> Int -> a
+(!!) [] _ = error "(!!): index too large"
+(!!) (x:_) 0 = x
+(!!) (_:xs) n | n < 0     = error "(!!): negative index"
+             | otherwise = xs !! (n-1)
 
 -- filter
+filter :: (a -> Bool) -> [a] -> [a]
+filter _ [] = []
+filter p (x:xs)
+  | p x       = x : filter p xs
+  | otherwise = filter p xs
 -- map
+map :: (a -> b) -> [a] -> [b]
+map _ [] = []
+map f (x:xs) = f x : map f xs
 
 -- cycle
+cycle :: [a] -> [a]
+cycle [] = error "cycle: empty list"
+cycle xs = xs ++ cycle xs
 -- repeat
+repeat :: a -> [a]
+repeat x = xs where xs = x : xs
 -- replicate
+replicate :: Int -> a -> [a]
+replicate n x | n <= 0    = []
+               | otherwise = x : replicate (n-1) x
 
 -- isPrefixOf
+isPrefixOf :: Eq a => [a] -> [a] -> Bool
+isPrefixOf [] _ = True
+isPrefixOf _ [] = False
+isPrefixOf (x:xs) (y:ys) = (x == y) && isPrefixOf xs ys
 -- isInfixOf
+isInfixOf :: Eq a => [a] -> [a] -> Bool
+isInfixOf needle haystack = any (isPrefixOf needle) (tails haystack)
 -- isSuffixOf
+isSuffixOf :: Eq a => [a] -> [a] -> Bool
+isSuffixOf needle haystack = isPrefixOf (reverse needle) (reverse haystack)
 
 -- zip
+zip :: [a] -> [b] -> [(a,b)]
+zip [] _ = []
+zip _ [] = []
+zip (x:xs) (y:ys) = (x,y) : zip xs ys ys
 -- zipWith
+zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith _ [] _ = []
+zipWith _ _ [] = []
+zipWith f (x:xs) (y:ys) = f x y : zipWith f xs ys
 
 -- intercalate
+intercalate :: [a] -> [[a]] -> [a]
+intercalate _ [] = []
+intercalate _ [xs] = xs
+intercalate sep (xs:xss) = xs ++ sep ++ intercalate sep x
 -- nub
+nub :: Eq a => [a] -> [a]
+nub [] = []
+nub (x:xs) = x : nub (filter (/= x) xs)
 
 -- splitAt
+splitAt :: Int -> [a] -> ([a],[a])
+splitAt n xs | n <= 0 = ([], xs)
+splitAt _ [] = ([], [])
+splitAt n (x:xs) = let (ys, zs) = splitAt (n-1) xs in (x:ys, zs)  
 -- what is the problem with the following?:
 -- splitAt n xs  =  (take n xs, drop n xs)
 
 -- break
+break :: (a -> Bool) -> [a] -> ([a],[a])
+break _ [] = ([], [])
+break p xs@(x:xs')
+  | p x       = ([], xs)
+  | otherwise = let (ys, zs) = break p xs' in (x:ys, zs)
+-- span
+span :: (a -> Bool) -> [a] -> ([a],[a])
+span _ [] = ([], [])
+span p xs@(x:xs')
+  | p x       = let (ys, zs) = span p xs' in (x:ys, zs)
+  | otherwise = ([], xs)
 
 -- lines
 -- words
@@ -206,23 +292,9 @@ init (x:xs) = x : init xs
 -- transpose
 
 -- checks if the letters of a phrase form a palindrome (see below for examples)
-
-normalize :: String -> String
-normalize [] = []
-normalize (x:xs)
-  | C.isAlpha x = C.toLower x : normalize xs
-  | otherwise   = normalize xs
-
-palindrome :: String -> Bool
-palindrome s = check (normalize s)
-  where
-    check []       = True
-    check [_]      = True
-    check (x:xs)   =
-      case reverse xs of
-        []     -> True
-        (y:ys) -> x == y && check ys
-
+Palindrome :: String -> Bool
+Palindrome xs = cleaned == reverse cleaned
+  where cleaned = map C.toLower (filter C.isAlpha xs)
 
 
 {-
