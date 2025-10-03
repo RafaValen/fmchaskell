@@ -1,4 +1,4 @@
-module ExBool where
+module FMCBool where
 
 -- Do not alter this import!
 import Prelude
@@ -36,13 +36,13 @@ instance Show Bool where
 
 instance Enum Bool where
 
-toEnum :: Int -> Bool
-toEnum 0 = False
-toEnum _ = True
+    toEnum :: Int -> Bool
+    toEnum 0 = False
+    toEnum _ = True
 
-fromEnum :: Bool -> Int
-fromEnum False = 0
-fromEnum True = 1
+    fromEnum :: Bool -> Int
+    fromEnum False = 0
+    fromEnum True = 1
 
 -- conjunction (AND)
 infixr 3 &&

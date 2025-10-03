@@ -112,7 +112,17 @@ xs +++ (y:ys) = (xs +++ [y]) +++ ys
 infixl 5 +++
 
 -- minimum :: Ord a => [a] -> a
+minimum :: Ord a => [a] -> a
+minimum [] = error "minimum: empty list"
+minimum [x] = x
+minimum (x:xs) = min x (minimum xs)
+
 -- maximum :: Ord a => [a] -> a
+maximum :: Ord a => [a] -> a
+maximum [] = error "maximum: empty list"
+maximum [x] = x
+maximum (x:xs) = max x (maximum xs)
+
 
 -- take
 -- drop
@@ -172,32 +182,23 @@ infixl 5 +++
 -- transpose
 
 -- checks if the letters of a phrase form a palindrome (see below for examples)
+
+normalize :: String -> String
+normalize [] = []
+normalize (x:xs)
+  | C.isAlpha x = C.toLower x : normalize xs
+  | otherwise   = normalize xs
+
 palindrome :: String -> Bool
 palindrome s = check (normalize s)
   where
-    normalize :: String -> String
-    normalize [] = []
-    normalize (x:xs)
-      | C.isAlpha x = C.toLower x : normalize xs
-      | otherwise   = normalize xs
+    check []       = True
+    check [_]      = True
+    check (x:xs)   =
+      case reverse xs of
+        []     -> True
+        (y:ys) -> x == y && check ys
 
-    check :: String -> Bool
-    check []  = True
-    check [_] = True
-    check xs  =
-      let f = first xs
-          (mid, l) = splitLast xs
-      in f == l && check mid
-
-    first :: [a] -> a
-    first (x:_) = x
-    first []    = error "first: empty list"
-
-    splitLast :: [a] -> ([a], a)
-    splitLast [y]    = ([], y)
-    splitLast (y:ys) =
-      let (mid, lastElem) = splitLast ys
-      in (y:mid, lastElem)
 
 
 {-
