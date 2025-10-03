@@ -22,8 +22,12 @@ uncurry f (x,y) = f x y
 
 -- flip takes a (currified) binary function
 -- and returns one that behaves the same but takes its arguments in the opposite order
+flip :: (a -> b -> c) -> b -> a -> c
+flip f x y = f y x
 
 -- (.) takes two composable functions and returns their composition
+(.) :: (b -> c) -> (a -> b) -> a -> c
+(f . g) x = f (g x)
 
 -- (.>) is composition but in diagramatic notation (should be ; but Haskell forbids)
 (.>) = flip (.)
@@ -33,7 +37,7 @@ uncurry f (x,y) = f x y
 
 -- iterate: figure it out by its type
 iterate :: (a -> a) -> a -> [a]
-iterate = undefined
+iterate f x = x : iterate f (f x)
 
 -- orbit
 orbit = flip iterate

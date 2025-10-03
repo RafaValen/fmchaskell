@@ -173,7 +173,32 @@ infixl 5 +++
 
 -- checks if the letters of a phrase form a palindrome (see below for examples)
 palindrome :: String -> Bool
-palindrome 
+palindrome s = check (normalize s)
+  where
+    normalize :: String -> String
+    normalize [] = []
+    normalize (x:xs)
+      | C.isAlpha x = C.toLower x : normalize xs
+      | otherwise   = normalize xs
+
+    check :: String -> Bool
+    check []  = True
+    check [_] = True
+    check xs  =
+      let f = first xs
+          (mid, l) = splitLast xs
+      in f == l && check mid
+
+    first :: [a] -> a
+    first (x:_) = x
+    first []    = error "first: empty list"
+
+    splitLast :: [a] -> ([a], a)
+    splitLast [y]    = ([], y)
+    splitLast (y:ys) =
+      let (mid, lastElem) = splitLast ys
+      in (y:mid, lastElem)
+
 
 {-
 
