@@ -285,16 +285,39 @@ span p xs@(x:xs')
   | otherwise = ([], xs)
 
 -- lines
+lines :: String -> [String]
+lines [] = []
+lines xs = let (pre, suf) = break (== '\n') xs
+           in pre : case suf of   
+                      []      -> []
+                      (_:suf') -> lines suf'
 -- words
+words :: String -> [String]
+words [] = []
+words xs = let (pre, suf) = break C.isSpace xs
+           in pre : case suf of
+                      []      -> []
+                      (_:suf') -> words suf'
 -- unlines
+unlines :: [String] -> String
+unlines [] = []
+unlines (x:xs) = x ++ '\n' : unlines xs
 -- unwords
+unwords :: [String] -> String
+unwords [] = []
+unwords [x] = x
+unwords (x:xs) = x ++ ' ' : unwords xs
 
 -- transpose
+transpose :: [[a]] -> [[a]]
+transpose [] = []
+transpose ([]:xss) = transpose xss
+transpose ((x:xs):xss) = (x : [h | (h:_) <- xss]) : transpose (xs : [t | (_:t) <- xss])
 
 -- checks if the letters of a phrase form a palindrome (see below for examples)
-Palindrome :: String -> Bool
-Palindrome xs = cleaned == reverse cleaned
-  where cleaned = map C.toLower (filter C.isAlpha xs)
+palindrome :: String -> Bool
+palindrome xs = let ys = L.map C.toLower (filter C.isAlpha xs) in ys == reverse ys
+
 
 
 {-
