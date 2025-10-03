@@ -246,7 +246,7 @@ isSuffixOf needle haystack = isPrefixOf (reverse needle) (reverse haystack)
 zip :: [a] -> [b] -> [(a,b)]
 zip [] _ = []
 zip _ [] = []
-zip (x:xs) (y:ys) = (x,y) : zip xs ys ys
+zip (x:xs) (y:ys) = (x,y) : zip xs ys
 -- zipWith
 zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
 zipWith _ [] _ = []
@@ -257,7 +257,7 @@ zipWith f (x:xs) (y:ys) = f x y : zipWith f xs ys
 intercalate :: [a] -> [[a]] -> [a]
 intercalate _ [] = []
 intercalate _ [xs] = xs
-intercalate sep (xs:xss) = xs ++ sep ++ intercalate sep x
+intercalate sep (xs:xss) = xs ++ sep ++ intercalate sep xss
 -- nub
 nub :: Eq a => [a] -> [a]
 nub [] = []
