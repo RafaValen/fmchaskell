@@ -240,7 +240,7 @@ isInfixOf :: Eq a => [a] -> [a] -> Bool
 isInfixOf needle haystack = any (isPrefixOf needle) (tails haystack)
 -- isSuffixOf
 isSuffixOf :: Eq a => [a] -> [a] -> Bool
-isSuffixOf needle haystack = isPrefixOf (reverse needle) (reverse haystack)
+isSuffixOf needle haystack = reverse needle `isPrefixOf` reverse haystack
 
 -- zip
 zip :: [a] -> [b] -> [(a,b)]
